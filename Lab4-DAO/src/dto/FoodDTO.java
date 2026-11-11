@@ -3,7 +3,6 @@ package dto;
 import java.io.Serializable;
 import java.util.Arrays;
 
-// 음식 정보를 저장하기 위한 DTO (food 테이블의 컬럼과 1:1 대응)
 public class FoodDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
