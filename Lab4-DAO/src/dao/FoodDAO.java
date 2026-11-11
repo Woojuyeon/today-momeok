@@ -1,12 +1,13 @@
-package persistence.dao;
+package dao;
 
 import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import persistence.util.JDBCUtil;
-import service.dto.FoodDTO;
+import util.JDBCUtil;
+import dto.FoodDTO;
 
 /**
  * 음식(food 테이블) 정보를 관리하는 DAO

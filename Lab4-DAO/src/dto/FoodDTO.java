@@ -1,4 +1,4 @@
-package service.dto;
+package dto;
 
 import java.io.Serializable;
 import java.util.Arrays;
