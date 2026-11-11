@@ -174,4 +174,63 @@ public class GroupDAO {
         }
 		return userList;
 	}
+	
+	// 멤버 추가
+	public GroupDTO addMember(GroupDTO group, String userId) {
+		StringBuffer query = new StringBuffer();
+		query.append("INSERT INTO group_member ");
+		query.append("(groups_group_id, is_favorite_group, users_user_id "
+				+ "VALUES (?, 0, ?)");
+		
+		Object[] param = new Object[] {group.getGroupId(), userId};
+		
+		jdbcUtil.setSqlAndParameters(query.toString(), param);
+		try {
+            jdbcUtil.executeUpdate();
+            
+            jdbcUtil.commit();
+            
+            return group;
+        }catch(Exception e) {
+            e.printStackTrace();
+            jdbcUtil.rollback();
+           
+        }finally {
+            jdbcUtil.close();
+        }
+		return null;
+	}
+	
+	public boolean deleteMember(GroupDTO group, String userId) {
+		StringBuffer query = new StringBuffer();
+		query.append("DELETE FROM group_member ");
+		query.append("WHERE groups_group_id=? AND users_user_id");
+		
+		
+		Object[] param = new Object[] {group.getGroupId(), userId};
+		
+		jdbcUtil.setSqlAndParameters(query.toString(), param);
+		try {
+            jdbcUtil.executeUpdate();
+            
+            jdbcUtil.commit();
+            
+            return true;
+        }catch(Exception e) {
+            e.printStackTrace();
+            jdbcUtil.rollback();
+           
+        }finally {
+            jdbcUtil.close();
+        }
+		return false;
+	}
+	
+	// 그룹 즐겨찾기 삭제
+	public deleteFavoriteGroup(GroupDTO group, String userId) {
+		StringBuffer query = new StringBuffer();
+		query.append("UPDATE FROM group_member ");
+		query.append("SET  ");
+		query.append("WHERE groups_group_id=? AND users_user_id=?");
+	}
 }
