@@ -18,27 +18,27 @@ public class GroupDAO {
 	//그룹 즐겨찾기 생성
 	public GroupDTO createGroup(GroupDTO group, String userId) {
 		
-		StringBuffer query = new StringBuffer();
-		query.append("SELECT group_id_sequence.NEXTVAL ");
-		query.append("AS group_id FROM dual");
-		
-		jdbcUtil.setSqlAndParameters(query.toString(), null);
+	    StringBuffer query = new StringBuffer();
+        query.append("SELECT group_id_sequence.NEXTVAL ");
+        query.append("AS group_id FROM dual");
+        
+        jdbcUtil.setSqlAndParameters(query.toString(), null);
 		
 		
 		try {
             ResultSet rs = null;
             rs = jdbcUtil.executeQuery();
-            String groupId = null;
+            int groupId = 0;
             if (rs.next()) {
-            	groupId = rs.getString("group_id");
+                groupId = rs.getInt("group_id");
             }
             
             query = new StringBuffer();
             query.append("INSERT INTO groups ");
-            query.append("(group_id, filter_food_log, filter_days) ");
+            query.append("(group_id, do_use_food_history, filter_days) ");
             query.append("VALUES (?, ?, ?)");
             
-            Object[] param = new Object[] {groupId, group.getFilterFoodLog(), group.getFilterDays()};
+            Object[] param = new Object[] {groupId, group.getFilterFoodLog() ? 1 : 0, group.getFilterDays()};
             
             jdbcUtil.setSqlAndParameters(query.toString(), param);
             jdbcUtil.executeUpdate();
@@ -48,11 +48,13 @@ public class GroupDAO {
             query.append("(groups_group_id, is_favorite_group, users_user_id) ");
             query.append("VALUES (?, 0, ?)");
             
-            for (int i = 0; i < group.getMembers().size(); i++) {
-            	param = new Object[] {groupId, group.getMembers().get(i)};
-                
-                jdbcUtil.setSqlAndParameters(query.toString(), param);
-                jdbcUtil.executeUpdate();
+            if (group.getMembers() != null) {
+                for (int i = 0; i < group.getMembers().size(); i++) {
+                    param = new Object[] {groupId, group.getMembers().get(i).getUserId()};
+                    
+                    jdbcUtil.setSqlAndParameters(query.toString(), param);
+                    jdbcUtil.executeUpdate();
+                }
             }
                       
                         
@@ -77,25 +79,24 @@ public class GroupDAO {
 		StringBuffer query = new StringBuffer();
 		query.append("SELECT group_id, filter_food_log, filter_days ");
 		query.append("FROM groups ");
-		query.append("WHERE group_id = ?");
+		query.append("WHERE group_id = ? AND is_deleted = 0");
 		
 		Object[] param = new Object[] {groupId};
 		
 		jdbcUtil.setSqlAndParameters(query.toString(), param);
 		
 		try {
-			GroupDTO group = new GroupDTO();
             ResultSet rs = null;
             rs = jdbcUtil.executeQuery();
             
             if (rs.next()) {
-            	group.setGroupId(rs.getInt("group_id"));
-            	group.setFilterFoodLog(rs.getBoolean("filter_food_log"));
+                GroupDTO group = new GroupDTO();
+                group.setGroupId(rs.getInt("group_id"));
+                group.setFilterFoodLog(rs.getInt("do_use_food_history") == 1);  
             	group.setFilterDays(rs.getInt("filter_days"));
+            	return group;
             }
-            
-            return group;
-        }catch(Exception e) {
+		}catch(Exception e) {
             e.printStackTrace();
             jdbcUtil.rollback();
            
@@ -104,13 +105,14 @@ public class GroupDAO {
         }
 		return null;
 	}
+	
 	// id로 그룹찾기
 	public List<GroupDTO> findgroupsById(String userId) {
 		List<GroupDTO> groupList = new ArrayList<GroupDTO>();
 		StringBuffer query = new StringBuffer();
-		query.append("SELECT groups.group_id, filter_food_log, filter_days ");
-		query.append("FROM groups JOIN group_members ON groups.group_id=group_members.group_id");
-		query.append("WHERE user_id = ?");
+		query.append("SELECT g.group_id, g.do_use_food_history, g.filter_days ");
+        query.append("FROM groups g JOIN group_member gm ON g.group_id = gm.groups_group_id ");
+        query.append("WHERE gm.users_user_id = ? AND g.is_deleted = 0");
 		
 		Object[] param = new Object[] {userId};
 		
@@ -124,7 +126,7 @@ public class GroupDAO {
             if (rs.next()) {
             	group = new GroupDTO();
             	group.setGroupId(rs.getInt("group_id"));
-            	group.setFilterFoodLog(rs.getBoolean("filter_food_log"));
+            	group.setFilterFoodLog(rs.getInt("do_use_food_history") == 1);
             	group.setFilterDays(rs.getInt("filter_days"));
             	groupList.add(group);
             }
@@ -144,9 +146,9 @@ public class GroupDAO {
 	public List<UserDTO> getAllMembers(int groupId) {
 		List<UserDTO> userList = new ArrayList<UserDTO>();
 		StringBuffer query = new StringBuffer();
-		query.append("SELECT users.user_id, user_name ");
-		query.append("FROM users JOIN group_members ON users.user_id=group_members.user_id");
-		query.append("WHERE users.user_id = ?");
+		query.append("SELECT u.user_id, u.user_name");
+		query.append("FROM users u JOIN group_member gm ON u.user_id = gm.users_user_id");
+		query.append("WHERE gm.groups_group_id = ?");
 		
 		Object[] param = new Object[] {groupId};
 		
@@ -178,8 +180,8 @@ public class GroupDAO {
 	// 멤버 추가
 	public GroupDTO addMember(GroupDTO group, String userId) {
 		StringBuffer query = new StringBuffer();
-		query.append("INSERT INTO group_member ");
-		query.append("(groups_group_id, is_favorite_group, users_user_id "
+		query.append("INSERT INTO group_member");
+		query.append("(groups_group_id, is_favorite_group, users_user_id)"
 				+ "VALUES (?, 0, ?)");
 		
 		Object[] param = new Object[] {group.getGroupId(), userId};
@@ -201,13 +203,14 @@ public class GroupDAO {
 		return null;
 	}
 	
-	public boolean deleteMember(GroupDTO group, String userId) {
+	//그룹 즐겨찾기 설정/해제
+	// favorite: true -> is_favorite_group = 1, false -> 0
+	//즐겨찾기 삭제할 때 사용하려고 이름 바꿨음
+	public boolean updateFavoriteGroup(GroupDTO group, String userId, boolean favorite) {
 		StringBuffer query = new StringBuffer();
-		query.append("DELETE FROM group_member ");
-		query.append("WHERE groups_group_id=? AND users_user_id");
-		
-		
-		Object[] param = new Object[] {group.getGroupId(), userId};
+		query.append("UPDATE group_member SET is_favorite_group = ?");
+		query.append("WHERE groups_group_id = ? AND users_user_id = ?");
+		Object[] param = new Object[] { favorite ? 1 : 0, group.getGroupId(), userId };
 		
 		jdbcUtil.setSqlAndParameters(query.toString(), param);
 		try {
@@ -226,11 +229,8 @@ public class GroupDAO {
 		return false;
 	}
 	
-	// 그룹 즐겨찾기 삭제
-	public deleteFavoriteGroup(GroupDTO group, String userId) {
-		StringBuffer query = new StringBuffer();
-		query.append("UPDATE FROM group_member ");
-		query.append("SET  ");
-		query.append("WHERE groups_group_id=? AND users_user_id=?");
+	// 그룹 즐겨찾기 삭제 - is_favorite_group = 0
+	public boolean deleteFavoriteGroup(GroupDTO group, String userId) {
+	    return updateFavoriteGroup(group, userId, false);
 	}
 }
