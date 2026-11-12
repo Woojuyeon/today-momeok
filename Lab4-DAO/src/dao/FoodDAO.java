@@ -28,7 +28,7 @@ public class FoodDAO {
 	public List<FoodDTO> searchFoodsByName(String foodName) {
 		List<FoodDTO> foodList = new ArrayList<FoodDTO>();
 		String query = "SELECT food_id, food_name, food_category, food_calories FROM food " 
-					+ "WHERE food_name LIKE ? AND is_delete=false ORDER BY food_name";
+                + "WHERE food_name LIKE ? AND is_deleted = 0 ORDER BY food_name";
 		Object[] param = new Object[] { "%" + foodName + "%" };
 		
 		try {
@@ -59,7 +59,7 @@ public class FoodDAO {
 	public List<FoodDTO> searchFoodsByCategory(String foodCategory) {
 		List<FoodDTO> foodList = new ArrayList<FoodDTO>();
 		String query = "SELECT food_id, food_name, food_category, food_calories , food_image FROM food "
-				+ "WHERE food_category = ? ORDER BY food_name";
+                + "WHERE food_category = ? AND is_deleted = 0 ORDER BY food_name";
 		Object[] param = new Object[] { foodCategory };	
 		
 		try {
@@ -90,7 +90,8 @@ public class FoodDAO {
 
 	// 같은 이름의 음식이 이미 있는지 확인 (음식 추가 전 중복 검사용)
 	public boolean existsFoodName(String foodName) {
-		String sql = "SELECT COUNT(*) FROM food WHERE food_name = ?";
+	    String sql = "SELECT COUNT(*) FROM food WHERE food_name = ? AND"
+	            + " is_deleted = 0";
 		Object[] param = new Object[] { foodName };
 		jdbcUtil.setSqlAndParameters(sql, param);
 		try {
@@ -108,13 +109,14 @@ public class FoodDAO {
 
 	// 음식 추가
 	public FoodDTO insertFood(FoodDTO food) throws SQLException {
-		String query = "INSERT INTO food (food_id, food_name, food_category, food_calories, food_image) "
-				+ "VALUES (food_id_sequence.NEXTVAL, ?, ?, ?, ?)";
-		Object[] param = new Object[] { food.getFoodName(), food.getFoodCategory(),
+	    String query = "INSERT INTO food (food_id, food_name, food_category, food_calories, food_image) "
+                + "VALUES (food_id_sequence.NEXTVAL, ?, ?, ?, ?)";
+	    
+	    Object[] param = new Object[] { food.getFoodName(), food.getFoodCategory(),
 				food.getFoodCalories(), food.getFoodImage() };
 		jdbcUtil.setSqlAndParameters(query, param);
 		try {
-			jdbcUtil.executeQuery();
+			jdbcUtil.executeUpdate();
 
 			jdbcUtil.commit();
 		} catch (Exception ex) {
@@ -129,13 +131,14 @@ public class FoodDAO {
 
 	// 음식 정보 수정 
 	public FoodDTO updateFood(FoodDTO food) throws SQLException {
-		String query = "UPDATE food SET food_name = ?, food_category = ?, food_calories = ?,  food_image = ? "
-				+ "WHERE food_id = ?";
-		Object[] param = new Object[] { food.getFoodName(), food.getFoodCategory(),
-				food.getFoodCalories(), food.getFoodId(), food.getFoodImage() };
-		jdbcUtil.setSqlAndParameters(query, param);
+	    String query = "UPDATE food SET food_name = ?, food_category = ?, food_calories = ?,  food_image = ? "
+                + "WHERE food_id = ?";
+	    Object[] param = new Object[] { food.getFoodName(), food.getFoodCategory(),
+                food.getFoodCalories(), food.getFoodImage(), food.getFoodId() };
+        jdbcUtil.setSqlAndParameters(query, param);
+        
 		try {
-			jdbcUtil.executeQuery();
+			jdbcUtil.executeUpdate();
 
 			jdbcUtil.commit();
 		} catch (Exception ex) {
@@ -150,11 +153,12 @@ public class FoodDAO {
 
 	// 음식 삭제 - soft delete
 	public int deleteFood(int foodId) throws SQLException {
-		String query = "UPDATE food SET is_delete=true"
-				+ "WHERE food_id = ?";
+	    String query = "UPDATE food SET is_deleted = 1 "
+                + "WHERE food_id = ?";
 		Object[] param = new Object[] { foodId };
 		try {
-			jdbcUtil.executeQuery();
+		    jdbcUtil.setSqlAndParameters(query, param);
+            jdbcUtil.executeUpdate();
 
 			jdbcUtil.commit();
 		} catch (Exception ex) {
