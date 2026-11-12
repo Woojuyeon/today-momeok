@@ -35,7 +35,7 @@ public class GroupDAO {
             
             query = new StringBuffer();
             query.append("INSERT INTO groups ");
-            query.append("(group_id, do_use_food_history, filter_days) ");
+            query.append("(group_id, do_use_food_log, filter_days) ");
             query.append("VALUES (?, ?, ?)");
             
             Object[] param = new Object[] {groupId, group.getFilterFoodLog() ? 1 : 0, group.getFilterDays()};
@@ -77,9 +77,9 @@ public class GroupDAO {
 	public GroupDTO findGroupById(int groupId) {
 		
 		StringBuffer query = new StringBuffer();
-		query.append("SELECT group_id, filter_food_log, filter_days ");
+		query.append("SELECT group_id, do_use_food_log, filter_days ");
 		query.append("FROM groups ");
-		query.append("WHERE group_id = ? AND is_deleted = 0");
+		query.append("WHERE group_id = ?");
 		
 		Object[] param = new Object[] {groupId};
 		
@@ -92,7 +92,7 @@ public class GroupDAO {
             if (rs.next()) {
                 GroupDTO group = new GroupDTO();
                 group.setGroupId(rs.getInt("group_id"));
-                group.setFilterFoodLog(rs.getInt("do_use_food_history") == 1);  
+                group.setFilterFoodLog(rs.getInt("do_use_food_log") == 1);
             	group.setFilterDays(rs.getInt("filter_days"));
             	return group;
             }
@@ -110,9 +110,9 @@ public class GroupDAO {
 	public List<GroupDTO> findgroupsById(String userId) {
 		List<GroupDTO> groupList = new ArrayList<GroupDTO>();
 		StringBuffer query = new StringBuffer();
-		query.append("SELECT g.group_id, g.do_use_food_history, g.filter_days ");
+		query.append("SELECT g.group_id, g.do_use_food_log, g.filter_days ");
         query.append("FROM groups g JOIN group_member gm ON g.group_id = gm.groups_group_id ");
-        query.append("WHERE gm.users_user_id = ? AND g.is_deleted = 0");
+        query.append("WHERE gm.users_user_id = ?");
 		
 		Object[] param = new Object[] {userId};
 		
@@ -126,7 +126,7 @@ public class GroupDAO {
             while (rs.next()) {
             	group = new GroupDTO();
             	group.setGroupId(rs.getInt("group_id"));
-            	group.setFilterFoodLog(rs.getInt("do_use_food_history") == 1);
+                group.setFilterFoodLog(rs.getInt("do_use_food_log") == 1);
             	group.setFilterDays(rs.getInt("filter_days"));
             	groupList.add(group);
             }
@@ -146,8 +146,8 @@ public class GroupDAO {
 	public List<UserDTO> getAllMembers(int groupId) {
 		List<UserDTO> userList = new ArrayList<UserDTO>();
 		StringBuffer query = new StringBuffer();
-		query.append("SELECT u.user_id, u.user_name");
-		query.append("FROM users u JOIN group_member gm ON u.user_id = gm.users_user_id");
+		query.append("SELECT u.user_id, u.user_name ");
+		query.append("FROM users u JOIN group_member gm ON u.user_id = gm.users_user_id ");
 		query.append("WHERE gm.groups_group_id = ?");
 		
 		Object[] param = new Object[] {groupId};
@@ -180,8 +180,8 @@ public class GroupDAO {
 	// 멤버 추가
 	public GroupDTO addMember(GroupDTO group, String userId) {
 		StringBuffer query = new StringBuffer();
-		query.append("INSERT INTO group_member");
-		query.append("(groups_group_id, is_favorite_group, users_user_id)"
+		query.append("INSERT INTO group_member ");
+		query.append("(groups_group_id, is_favorite_group, users_user_id) "
 				+ "VALUES (?, 0, ?)");
 		
 		Object[] param = new Object[] {group.getGroupId(), userId};
@@ -208,7 +208,7 @@ public class GroupDAO {
 	//즐겨찾기 삭제할 때 사용하려고 이름 바꿨음
 	public boolean updateFavoriteGroup(GroupDTO group, String userId, boolean favorite) {
 		StringBuffer query = new StringBuffer();
-		query.append("UPDATE group_member SET is_favorite_group = ?");
+		query.append("UPDATE group_member SET is_favorite_group = ? ");
 		query.append("WHERE groups_group_id = ? AND users_user_id = ?");
 		Object[] param = new Object[] { favorite ? 1 : 0, group.getGroupId(), userId };
 		

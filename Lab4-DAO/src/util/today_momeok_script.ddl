@@ -97,10 +97,9 @@ ALTER TABLE group_member ADD CONSTRAINT group_member_pk PRIMARY KEY ( groups_gro
                                                                       users_user_id );
 
 CREATE TABLE groups (
-    group_id            INTEGER NOT NULL,
+    group_id        INTEGER NOT NULL,
     do_use_food_log INTEGER DEFAULT 0,
-    filter_days         INTEGER DEFAULT 0,
-    is_deleted          INTEGER DEFAULT 0 NOT NULL
+    filter_days     INTEGER DEFAULT 0
 )
 LOGGING;
 
@@ -109,9 +108,6 @@ ALTER TABLE groups
 
 ALTER TABLE groups
     ADD CONSTRAINT groups_filter_days_ck CHECK ( filter_days BETWEEN 0 AND 31 );
-
-ALTER TABLE groups
-    ADD CONSTRAINT groups_is_deleted_ck CHECK ( is_deleted IN ( 0, 1 ) );
 
 ALTER TABLE groups ADD CONSTRAINT groups_pk PRIMARY KEY ( group_id );
 
@@ -260,21 +256,16 @@ SELECT me.users_user_id,
        m.users_user_id
 FROM   group_member me
        JOIN group_member m ON m.groups_group_id = me.groups_group_id
-       JOIN groups g       ON g.group_id = me.groups_group_id
 WHERE  me.is_favorite_group = 1
-  AND  g.is_deleted = 0 
 ;
 
-CREATE OR REPLACE VIEW v_food_log_detail ( food_log_id, users_user_id, eaten_date, groups_group_id, food_id, food_name, food_category, food_calories, is_deleted ) AS
+CREATE OR REPLACE VIEW v_food_log_detail ( food_log_id, users_user_id, eaten_date, groups_group_id, food_id, food_name ) AS
 SELECT l.food_log_id,
        l.users_user_id,
        l.eaten_date,
        l.groups_group_id,
        f.food_id,
-       f.food_name,
-       f.food_category,
-       f.food_calories,
-       f.is_deleted
+       f.food_name
 FROM   food_log l
        LEFT JOIN food f ON f.food_id = l.food_food_id 
 ;
@@ -299,7 +290,6 @@ FROM   (
          FROM   group_member gm
                 JOIN hate_food hf ON hf.user_id = gm.users_user_id
        ) t
-       JOIN groups g ON g.group_id = t.group_id AND g.is_deleted = 0
        JOIN food f   ON f.food_id  = t.food_id  AND f.is_deleted = 0
 GROUP  BY t.group_id, t.food_id 
 ;
@@ -315,7 +305,7 @@ FROM   users
 -- 
 -- CREATE TABLE                             9
 -- CREATE INDEX                             1
--- ALTER TABLE                             34
+-- ALTER TABLE                             33
 -- CREATE VIEW                              4
 -- ALTER VIEW                               0
 -- CREATE PACKAGE                           0

@@ -1,22 +1,22 @@
 package dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class FoodLogDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int foodLogId;          // 식사 이력 번호 (PK, foodlog_id_sequence로 생성)
     private String userId;          // 먹은 사용자
-    private Integer foodId;         // 음식 번호 (음식 삭제 시 NULL 가능)
-    private Integer groupId;        // 그룹 번호 (혼자 먹었거나 그룹 삭제 시 NULL)
+    private Integer foodId;         // 음식 번호 (음식이 실제 삭제된 경우 NULL 가능)
+    private Integer groupId;        // 그룹 번호 (그룹 없이 먹었으면 NULL)
     private Date eatenDate;         // 먹은 날짜
 
-    // 조회(v_food_log_detail) 시에만 채워짐. foodId가 null이면 모두 null/기본값
+    // 조회 시 채우는 표시 정보. 멤버 이름은 연결된 그룹의 현재 구성 기준이다.
     private String foodName;
-    private String foodCategory;
-    private int foodCalories;
-    private boolean foodDeleted;    // 음식이 soft delete 되었는지 boolean 처리
+    private List<String> members = new ArrayList<String>();
 
     public FoodLogDTO() { }
 
@@ -64,29 +64,18 @@ public class FoodLogDTO implements Serializable {
     public void setFoodName(String foodName) {
         this.foodName = foodName;
     }
-    public String getFoodCategory() {
-        return foodCategory;
+    public List<String> getMembers() {
+        return members;
     }
-    public void setFoodCategory(String foodCategory) {
-        this.foodCategory = foodCategory;
-    }
-    public int getFoodCalories() {
-        return foodCalories;
-    }
-    public void setFoodCalories(int foodCalories) {
-        this.foodCalories = foodCalories;
-    }
-    public boolean isFoodDeleted() {
-        return foodDeleted;
-    }
-    public void setFoodDeleted(boolean foodDeleted) {
-        this.foodDeleted = foodDeleted;
+    public void setMembers(List<String> members) {
+        this.members = members;
     }
 
     @Override
     public String toString() {
         return "FoodLogDTO [foodLogId=" + foodLogId + ", userId=" + userId
                 + ", foodId=" + foodId + ", groupId=" + groupId
-                + ", eatenDate=" + eatenDate + ", foodName=" + foodName + "]";
+                + ", eatenDate=" + eatenDate + ", foodName=" + foodName
+                + ", members=" + members + "]";
     }
 }

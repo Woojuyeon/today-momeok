@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
  
 import dto.FoodLogDTO;
 import util.JDBCUtil;
@@ -27,33 +28,37 @@ public class FoodLogDAO {
         try {
             jdbcUtil.setSqlAndParameters(query, param);
             ResultSet rs = jdbcUtil.executeQuery();
-            FoodLogDTO log;
             while (rs.next()) {
-                log = new FoodLogDTO();
-                log.setFoodLogId(rs.getInt("food_log_id"));
-                log.setUserId(rs.getString("users_user_id"));
-                log.setEatenDate(rs.getTimestamp("eaten_date"));
- 
-                int groupId = rs.getInt("groups_group_id");
-                log.setGroupId(rs.wasNull() ? null : groupId);
- 
-                // v_food_log_detail 이 LEFT JOIN 이라 음식이 삭제됐으면 food_id 가 NULL
-                int foodId = rs.getInt("food_id");
-                if (!rs.wasNull()) {
-                    log.setFoodId(foodId);
+                int foodLogId = rs.getInt("food_log_id");
+                FoodLogDTO log = foodLogs.get(foodLogId);
+                if (log == null) {
+                    log = new FoodLogDTO();
+                    log.setFoodLogId(foodLogId);
+                    log.setUserId(rs.getString("users_user_id"));
+                    log.setEatenDate(rs.getTimestamp("eaten_date"));
+
+                    int groupId = rs.getInt("groups_group_id");
+                    log.setGroupId(rs.wasNull() ? null : groupId);
+
+                    // soft delete된 음식도 이력에는 남기고, 실제 삭제된 경우에만 null로 처리한다.
+                    int foodId = rs.getInt("food_id");
+                    log.setFoodId(rs.wasNull() ? null : foodId);
                     log.setFoodName(rs.getString("food_name"));
-                    log.setFoodCategory(rs.getString("food_category"));
-                    log.setFoodCalories(rs.getInt("food_calories"));
-                    log.setFoodDeleted(rs.getInt("is_deleted") == 1);
+                    foodLogs.put(foodLogId, log);
                 }
-                foodlogList.add(log);
+
+                // 멤버 수만큼 JOIN된 행을 하나의 식사 이력으로 모은다.
+                String memberName = rs.getString("member_name");
+                if (memberName != null) {
+                    log.getMembers().add(memberName);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             jdbcUtil.close();
         }
-        return foodlogList;     // 아무것도 없으면 빈 리스트 반환
+        return new ArrayList<FoodLogDTO>(foodLogs.values());     // 아무것도 없으면 빈 리스트 반환
     }
     
     //식사 이력 추가 (성공 1, 실패 -1)
