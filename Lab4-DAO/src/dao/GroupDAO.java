@@ -123,7 +123,7 @@ public class GroupDAO {
             ResultSet rs = null;
             rs = jdbcUtil.executeQuery();
             
-            if (rs.next()) {
+            while (rs.next()) {
             	group = new GroupDTO();
             	group.setGroupId(rs.getInt("group_id"));
             	group.setFilterFoodLog(rs.getInt("do_use_food_history") == 1);
