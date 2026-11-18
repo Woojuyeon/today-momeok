@@ -1,0 +1,66 @@
+package filter;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+//import jakarta.servlet.annotation.WebFilter;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+/* 정적 파일들에 대한 요청을 default servlet을 통해 처리하기 위한 Filter class  	   
+ */
+//@WebFilter(filterName="Resource Filter", urlPatterns="/*")
+public class ResourceFilter implements Filter {
+    private static final Logger logger = LoggerFactory.getLogger(ResourceFilter.class);
+    private static final List<String> resourcePrefixs = new ArrayList<>();
+    static {
+        resourcePrefixs.add("/css");
+        resourcePrefixs.add("/js");
+        resourcePrefixs.add("/fonts");
+        resourcePrefixs.add("/images");
+        resourcePrefixs.add("/favicon.ico");
+    }
+
+    private RequestDispatcher defaultRequestDispatcher;
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        this.defaultRequestDispatcher = filterConfig.getServletContext().getNamedDispatcher("default");
+    }
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        HttpServletRequest req = (HttpServletRequest) request;
+        String path = req.getRequestURI().substring(req.getContextPath().length());
+        if (isResourceUrl(path)) {
+            logger.debug("path : {}", path);
+            defaultRequestDispatcher.forward(request, response);
+        } else {
+            chain.doFilter(request, response);
+        }
+    }
+
+    private boolean isResourceUrl(String url) {
+        for (String prefix : resourcePrefixs) {
+            if (url.startsWith(prefix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void destroy() { }
+}

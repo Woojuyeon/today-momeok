@@ -1,0 +1,107 @@
+div {
+	margin-top: 30px;
+	margin-left: 20px;
+}
+
+div.appTitle { 
+	margin-bottom: 10px;
+	font-size: 9pt;
+}
+
+div.title {
+	display: inline-block;
+	padding: 5px 10px;
+	border-radius: 5px;
+	text-align: center;
+	font-family: 돋움;
+	font-size: 12pt;
+	font-weight: bold;
+	color: Black;
+	background-color: Beige;
+}
+
+div.errmsg {
+	color: red;
+}
+
+table.mTable {
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
+table.uTable {
+	background: YellowGreen;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	margin-left: 20px;
+}
+
+table.uTable th {
+	height: 22px;
+	text-align: center;
+	background: #E6ECDE;
+	font-size: 10pt;
+	font-weight: normal;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+table.uTable td {
+	height: 22px;
+	text-align: left;
+	background: White;
+	font-size: 10pt;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+input[type="text"], input[type="password"]  {
+	font-family: 돋움;
+	font-size: 9pt;
+	color: #333333;
+  	padding: 5px 5px;
+  	transition: border-color 0.2s; /* 부드러운 색상 전환 */
+}
+
+input[type="text"]:focus {
+  	border-color: #007bff; 
+}
+
+button {
+	display: inline-block;
+	padding: 5px 5px;
+	color: #333333;
+	border-radius: 5px;
+	font-weight: bold;
+	text-align: center;
+	margin-right: 5px;
+}
+
+a {
+	font-size: 10pt;
+	color: #333333;
+}
+
+a:hover {
+	color: #0066cc;
+	/* 	font-weight: bold; */
+}
+
+a:visited {
+	color: #555555;
+}
+
+a.btn {
+	display: inline-block;
+	padding: 6px 6px;
+	background-color: #0080ff;
+	color: #ffffff;
+	border-radius: 5px;
+	font-weight: bold;
+	text-align: center;
+	margin-right: 5px;
+}
+
+a.btn:hover {
+	background-color: #0056b3;
+}

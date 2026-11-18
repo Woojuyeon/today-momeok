@@ -1,0 +1,39 @@
+@import "user.css";
+
+div.title {
+	display: inline-block;
+	padding: 5px 10px;
+	border-radius: 5px;
+	text-align: center;
+	font-family: 돋움;
+	font-size: 12pt;
+	font-weight: bold;
+	color: Black;
+	background-color: LightCyan;
+}
+
+table.cTable {
+  	background: MediumBlue;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	margin-left: 20px;
+}
+
+table.cTable th {
+	height: 22px;
+	text-align: center;
+  	background: PowderBlue; 
+	font-size: 10pt;
+	font-weight: normal;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+table.cTable td {
+	height: 22px;
+	text-align: left;
+	background: White;
+	font-size: 10pt;
+	padding-left: 10px;
+	padding-right: 10px;
+}
