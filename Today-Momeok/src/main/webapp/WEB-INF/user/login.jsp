@@ -11,14 +11,25 @@
 	<h2>오늘 뭐 먹지?</h2>
 	<div>
 	<form name="loginForm" method="POST" action="<c:url value='/user/loginForm' />">
-		아이디: <input type="text" id="userId" name="userId">
-		<br>
-		비밀번호: <input type="password" id="password" name="password">
+		<table>
+	      <tr>
+	        <th>아이디: </th>
+	        <td><input type="text" id="userId" name="userId"></td>
+	      </tr>
+	      <tr>
+	        <th>비밀번호: </th>
+	        <td><input type="password" id="password" name="password"></td>
+	      </tr>
+	      <tr>
+	      	<td>
+	      		<button type="submit">로그인</button>
+	      	</td>
+	      </tr>
+	    </table>
 		
-		<br><button type="submit">로그인</button>
 	</form>
 	</div>
 	
-	<button onclick="location.href='/user/register'">회원가입</button>
+	<button onclick="location.href='<c:url value='/user/register' />'">회원가입</button>
 </body>
 </html>

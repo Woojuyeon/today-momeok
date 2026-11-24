@@ -19,11 +19,13 @@ public class RegisterUserController implements Controller {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	/*
        	if (request.getMethod().equals("GET")) {	// GET request: 회원정보 등록 form 요청	
-    		List<Community> commList = UserManager.getInstance().findCommunityList();	// 커뮤니티 리스트 검색
-			request.setAttribute("commList", commList);	
+    		//List<Community> commList = UserManager.getInstance().findCommunityList();	// 커뮤니티 리스트 검색
+			//request.setAttribute("commList", commList);	
 		
-			return "/user/registerForm.jsp";   // 검색된 커뮤니티 리스트를 registerForm으로 전송    	
+			//return "/user/registerForm.jsp";   // 검색된 커뮤니티 리스트를 registerForm으로 전송   
+			return "/user/register.jsp";
 	    }	
        	
     	// POST request 처리    	
@@ -48,5 +50,7 @@ public class RegisterUserController implements Controller {
 			request.setAttribute("user", user);
 			return "/user/registerForm.jsp";
 		}
+		*/
+    	return "/user/register.jsp";
     }
 }
