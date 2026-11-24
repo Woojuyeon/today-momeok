@@ -1,23 +1,18 @@
 package model.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import dto.GroupDTO;
-import dto.UserDTO;
+import model.domain.Group;
+import model.domain.User;
 
 public class GroupManager {
     private static final int DEFAULT_FILTER_DAYS = 3;
 
-    public GroupDTO createGroup(String userId, String userName) {
-        UserDTO member = new UserDTO();
+    public Group createGroup(String userId, String userName) {
+        User member = new User();
         member.setUserId(userId);
-        member.setUserName(userName);
+        member.setName(userName);
 
-        List<UserDTO> members = new ArrayList<>();
-        members.add(member);
-
-        GroupDTO group = new GroupDTO(members);
+        Group group = new Group();
+        group.addMember(member);
         group.setFilterDays(DEFAULT_FILTER_DAYS);
         return group;
     }
