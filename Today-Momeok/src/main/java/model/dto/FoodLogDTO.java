@@ -1,4 +1,4 @@
-package dto;
+package model.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
