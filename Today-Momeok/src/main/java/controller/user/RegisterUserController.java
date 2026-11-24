@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import controller.Controller;
-import model.domain.Community;
 import model.domain.User;
 import model.service.ExistingUserException;
 import model.service.UserManager;
@@ -20,8 +19,6 @@ public class RegisterUserController implements Controller {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
        	if (request.getMethod().equals("GET")) {	// GET request: 회원정보 등록 form 요청	
-    		List<Community> commList = UserManager.getInstance().findCommunityList();	// 커뮤니티 리스트 검색
-			request.setAttribute("commList", commList);	
 		
 			return "/user/registerForm.jsp";   // 검색된 커뮤니티 리스트를 registerForm으로 전송    	
 	    }	
