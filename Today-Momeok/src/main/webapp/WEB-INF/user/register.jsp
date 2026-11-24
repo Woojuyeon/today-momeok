@@ -6,30 +6,40 @@
 <head>
 <meta charset="UTF-8">
 <title>회원가입</title>
-</head>
 <script>
 function userCreate() {
+	let form = document.registerForm;
+	
 	if (form.userId.value == "") {
-		alert("사용자 ID를 입력하십시오.");
+		alert("아이디가 비어있습니다.");
 		form.userId.focus();
 		return false;
 	} 
 	if (form.password.value == "") {
-		alert("비밀번호를 입력하십시오.");
+		alert("비밀번호가 비어있습니다.");
 		form.password.focus();
 		return false;
 	}
+	if(form.age.value == ""){
+		alert("나이가 비어있습니다.");
+		form.age.focus();
+		return false;
+	}
+	
+	/*
 	if (form.password.value != form.password2.value) {
 		alert("비밀번호가 일치하지 않습니다.");
 		form.password2.focus();
 		return false;
 	}
+	*/
 	
 	form.submit();
 }
 </script>
+</head>
 <body>
-	<form name="registerForm" method="POST" action="<c:url value='/user/registerForm' />">
+	<form name="registerForm" method="POST" action="<c:url value='/user/register' />">
 		<table>
 			<tr>
 		        <th>아이디: </th>
@@ -53,11 +63,16 @@ function userCreate() {
 		    </tr>
 		    <tr>
 		    	<td colspan="2">
-		    		<input type="file">
+		    		<input type="file" id="image" name="image">
 		    	</td>
 		    </tr>
 		    <tr>
-		    	<td colspan="2"><button type="submit" onClick="userCreate()">회원가입</button></td>
+		    	<td colspan="2">
+		    		<c:if test="${registerFailed}">에러</c:if>
+		    	</td>
+		    </tr>
+		    <tr>
+		    	<td colspan="2"><button type="button" onclick="userCreate()">회원가입</button></td>
 		    </tr>
 		</table>
 	</form>

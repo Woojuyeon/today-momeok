@@ -1,4 +1,4 @@
-package dao;
+package model.dao;
 
 import java.sql.ResultSet;
 import java.sql.Timestamp;
@@ -7,8 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
  
-import dto.FoodLogDTO;
-import util.JDBCUtil;
+import model.dto.FoodLogDTO;
+import model.util.JDBCUtil;
 
 public class FoodLogDAO {
     //식사이력조회

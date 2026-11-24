@@ -1,12 +1,12 @@
-package dao;
+package model.dao;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import util.JDBCUtil;
+import model.util.JDBCUtil;
 
-import dto.UserDTO;
+import model.dto.UserDTO;
 
 public class UserDAO {
     //회원가입

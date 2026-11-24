@@ -1,4 +1,4 @@
-package dao;
+package model.dao;
 
 import java.sql.ResultSet;
 
@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import util.JDBCUtil;
-import dto.FoodDTO;
+import model.util.JDBCUtil;
+import model.dto.FoodDTO;
 
 public class FoodDAO {
 	private JDBCUtil jdbcUtil = null;

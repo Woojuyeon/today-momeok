@@ -1,4 +1,4 @@
-package util;
+package model.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +20,7 @@ public class JDBCUtil {
 	{
 		InputStream input = null;
 		try {
-			input = getClass().getResourceAsStream("/dbinfo.properties");
+			input = getClass().getResourceAsStream("/context.properties");
 			prop.load(input);			// load the properties file
 		} catch (IOException ex) {
 			ex.printStackTrace();

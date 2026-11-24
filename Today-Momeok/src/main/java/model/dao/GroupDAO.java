@@ -1,12 +1,12 @@
-package dao;
+package model.dao;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import dto.GroupDTO;
-import dto.UserDTO;
-import util.JDBCUtil;
+import model.dto.GroupDTO;
+import model.dto.UserDTO;
+import model.util.JDBCUtil;
 
 public class GroupDAO {
 	private JDBCUtil jdbcUtil = null;

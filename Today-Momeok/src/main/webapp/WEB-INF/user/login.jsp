@@ -8,9 +8,9 @@
 <title>로그인</title>
 </head>
 <body>
-	<h2>오늘 뭐 먹지?</h2>
+	<h1>오늘 뭐 먹지?</h1>
 	<div>
-	<form name="loginForm" method="POST" action="<c:url value='/user/loginForm' />">
+	<form name="loginForm" method="POST" action="<c:url value='/user/login' />">
 		<table>
 	      <tr>
 	        <th>아이디: </th>
@@ -19,6 +19,11 @@
 	      <tr>
 	        <th>비밀번호: </th>
 	        <td><input type="password" id="password" name="password"></td>
+	      </tr>
+	      <tr>
+	      	<td colspan="2">
+	      		<c:if test="${loginFailed}">아이디나 비밀번호가 틀렸습니다.</c:if>
+	      	</td>
 	      </tr>
 	      <tr>
 	      	<td>
