@@ -1,7 +1,6 @@
-package dto;
+package model.dto;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 public class FoodDTO implements Serializable {
 	private static final long serialVersionUID = 1L;

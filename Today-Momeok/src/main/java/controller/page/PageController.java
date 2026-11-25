@@ -23,9 +23,9 @@ public class PageController implements Controller {
         if (userId == null) {
             return "redirect:/user/login";
         }
-
-        String userName = (String) session.getAttribute(UserSessionUtils.USER_NAME_SESSION_KEY);
-        request.setAttribute("group", groupManager.createGroup(userId, userName));
+        // session 정보를 불러오기 기능을 넣은 후 작동
+//        String userName = (String) session.getAttribute(UserSessionUtils.USER_NAME_SESSION_KEY);
+//        request.setAttribute("group", groupManager.createGroup(userId, userName));
         return "/group/makegroup.jsp";
     }
 }

@@ -5,12 +5,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import controller.comm.DeleteCommunityController;
-import controller.comm.ListCommunityController;
-import controller.comm.UpdateCommunityController;
-import controller.comm.ViewCommunityController;
-import controller.comm.rest.CreateCommunityRestController;
-import controller.comm.rest.ViewCommunityRestController;
 import controller.page.PageController;
 import controller.user.*;
 
@@ -35,18 +29,6 @@ public class RequestMapping {
         mappings.put("/user/update", new UpdateUserController());	
         
         mappings.put("/group", new PageController());
-
-        // 커뮤니티 관련 request mapping
-        // mappings.put("/community/create", new CreateCommunityController_deprecated());
-        mappings.put("/community/create", new ForwardController("/community/creationForm.jsp"));
-        mappings.put("/community/delete", new DeleteCommunityController());
-        mappings.put("/community/update", new UpdateCommunityController());
-		mappings.put("/community/list", new ListCommunityController());
-        mappings.put("/community/view", new ViewCommunityController());
-        
-        // 커뮤니티 생성 및 상세정보 요청에 대한 REST controller mapping 설정 추가    
-        mappings.put("/rest/community/create", new CreateCommunityRestController());
-        mappings.put("/rest/community/view/", new ViewCommunityRestController());
 
         logger.info("Initialized Request Mapping!");
     }

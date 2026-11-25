@@ -1,8 +1,4 @@
-package dto;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+package model.dto;
 
 public class UserDTO {
     private String userId;

@@ -1,11 +1,11 @@
-package dao;
+package model.dao;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import dto.FoodDTO;
-import util.JDBCUtil;
+import model.dto.FoodDTO;
+import model.util.JDBCUtil;
 
 public class PreferenceDAO {
 	private JDBCUtil jdbcUtil = null;

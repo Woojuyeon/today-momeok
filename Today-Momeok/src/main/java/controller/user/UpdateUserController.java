@@ -4,12 +4,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import controller.Controller;
-import model.domain.Community;
 import model.domain.User;
 import model.service.UserManager;
 
@@ -34,9 +31,6 @@ public class UpdateUserController implements Controller {
     		HttpSession session = request.getSession();
     		if (UserSessionUtils.isLoginUser(updateId, session) ||  // 현재 로그인한 사용자가 자신의 정보를 수정하는 경우	
     			UserSessionUtils.isLoginUser("admin", session)) {   // 현재 사용자가 관리자인 경우 타인 정보도 수정 가능
-    			
-    			List<Community> commList = manager.findCommunityList();	// 커뮤니티 리스트 검색
-				request.setAttribute("commList", commList);	
 				
 				return "/user/updateForm.jsp";   // 검색된 사용자 정보 및 커뮤니티 리스트를 updateForm으로 전송     
 			}   
