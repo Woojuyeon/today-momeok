@@ -56,6 +56,10 @@ public class User {
 		return name;
 	}
 
+	public String getUserName() {
+		return getName();
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}

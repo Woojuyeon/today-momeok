@@ -11,6 +11,7 @@ import controller.comm.UpdateCommunityController;
 import controller.comm.ViewCommunityController;
 import controller.comm.rest.CreateCommunityRestController;
 import controller.comm.rest.ViewCommunityRestController;
+import controller.page.PageController;
 import controller.user.*;
 
 public class RequestMapping {
@@ -33,6 +34,8 @@ public class RequestMapping {
         // mappings.put("/user/update/form", new UpdateUserController());	// 아래의 요청으로 통합
         mappings.put("/user/update", new UpdateUserController());	
         
+        mappings.put("/group", new PageController());
+
         // 커뮤니티 관련 request mapping
         // mappings.put("/community/create", new CreateCommunityController_deprecated());
         mappings.put("/community/create", new ForwardController("/community/creationForm.jsp"));
