@@ -12,13 +12,19 @@ public class UserDAO {
         JDBCUtil jdbcUtil = new JDBCUtil();
         
         String query = "INSERT INTO USERS "
-                + "(user_id, user_pw, user_name) "
-                + "VALUES (?, ?, ?)";
+                + "(user_id, user_pw, user_name, user_age, user_gender, user_image, user_image_ext) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         try {
-            jdbcUtil.setSqlAndParameters(query, new Object[] {user.getUserId(), user.getPassword(), user.getUserName()});
+            jdbcUtil.setSqlAndParameters(query, 
+            		new Object[] {user.getUserId(), user.getPassword(), user.getUserName(), user.getAge(), user.getGender(), user.getImage(), user.getImageExt()});
+            
+            jdbcUtil.executeUpdate();
+            jdbcUtil.commit();
+        
         }catch(Exception e) {
             e.printStackTrace();
+            jdbcUtil.rollback();
            
         }finally {
             jdbcUtil.close();
@@ -85,7 +91,7 @@ public class UserDAO {
     }
     
     public UserDTO findById(String userId) {
-    	UserDTO user = new UserDTO();		// 이거 null로 해야 하는 거 아닌감
+    	UserDTO user = null;	
     	JDBCUtil jdbcUtil = new JDBCUtil();
     	
     	String query = "SELECT user_id, user_pw, user_name, user_role, user_age, user_gender, user_image "
@@ -101,12 +107,15 @@ public class UserDAO {
             rs = jdbcUtil.executeQuery();
             
             if (rs.next()) {
+            	user = new UserDTO();
+            	
             	user.setUserId(rs.getString("user_id"));
             	user.setPassword(rs.getString("user_pw"));
             	user.setUserName(rs.getString("user_name"));
             	user.setRole(rs.getString("user_role"));
             	user.setGender(rs.getString("user_gender"));
             	user.setImage(rs.getBytes("user_image"));
+            	
             	return user;
             }
 

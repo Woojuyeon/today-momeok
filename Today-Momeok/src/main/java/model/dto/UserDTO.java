@@ -8,6 +8,7 @@ public class UserDTO {
     private int Age;
     private String gender;
     private byte[] image;
+    private String imageExt;
     
     public String getGender() {
 		return gender;
@@ -65,8 +66,13 @@ public class UserDTO {
 		this.gender = gender;
 	}
 
-    
+	public String getImageExt() {
+		return imageExt;
+	}
 
+	public void setImageExt(String imageExt) {
+		this.imageExt = imageExt;
+	}
     
     
 }
