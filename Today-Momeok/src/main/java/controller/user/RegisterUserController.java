@@ -9,7 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import controller.Controller;
-import model.domain.User;
+import model.domain.User; //
+import model.dto.UserDTO;
 import model.service.ExistingUserException;
 import model.service.UserManager;
 
@@ -23,6 +24,23 @@ public class RegisterUserController implements Controller {
 			return "/user/registerForm.jsp";   // 검색된 커뮤니티 리스트를 registerForm으로 전송    	
 	    }	
        	
+       	UserDTO user = new UserDTO();
+       	
+       	String userId = request.getParameter("userId");
+       	String password = request.getParameter("password");
+       	String name = request.getParameter("name");
+       	String age = request.getParameter("age");
+       	String gender = request.getParameter("gender");
+		
+       	user.setUserId(userId);
+       	user.setPassword(password);
+       	user.setUserName(name);
+       	user.setAge(Integer.parseInt(age));
+       	user.setGender(gender);
+       	
+       	
+       	
+       	/*
     	// POST request 처리    	
  		User user = new User(
 			request.getParameter("userId"),
@@ -31,12 +49,12 @@ public class RegisterUserController implements Controller {
 			request.getParameter("email"),
 			request.getParameter("phone"),
 			Integer.parseInt(request.getParameter("commId")));	// 커뮤니티 Id 추출 
-		
+		*/
         log.debug("Create User : {}", user);
 
 		try {
 			UserManager manager = UserManager.getInstance();
-			manager.create(user);
+			manager.createUser(user);
 	        return "redirect:/user/list";		// 사용자 리스트 요청으로 redirect
 	        
 		} catch (ExistingUserException e) {		// 예외 발생 시 회원가입 form으로 forwarding

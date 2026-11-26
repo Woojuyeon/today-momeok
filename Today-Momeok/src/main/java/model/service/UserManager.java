@@ -35,6 +35,21 @@ public class UserManager {
 			
 			return user;
 		}
+	
+	public UserDTO createUser(UserDTO user) throws SQLException, ExistingUserException {
+		
+		
+		if (userDAO.findById(user.getUserId()) != null) {
+			throw new ExistingUserException(user.getUserId() + "는 존재하는 아이디입니다.");
+		}
+		
+		/*
+		if (userDAO.existingUser(user.getUserId()) == true) {
+			throw new ExistingUserException(user.getUserId() + "는 존재하는 아이디입니다.");
+		}
+		*/
+		return userDAO.createUser(user);
+	}
 
 	
 	/*

@@ -2,21 +2,23 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
-  <title>사용자 관리</title>
+  <title>회원가입</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <link rel=stylesheet href="<c:url value='/css/user.css' />" type="text/css">
   <script>
     function userCreate() {
+    	let form = document.registerForm;
+    	
     	if (form.userId.value == "") {
-    		alert("사용자 ID를 입력하십시오.");
+    		alert("아이디가 비어있습니다.");
     		form.userId.focus();
     		return false;
     	} 
     	if (form.password.value == "") {
-    		alert("비밀번호를 입력하십시오.");
+    		alert("비밀번호가 비어있습니다.");
     		form.password.focus();
     		return false;
     	}
+    	/*
     	if (form.password.value != form.password2.value) {
     		alert("비밀번호가 일치하지 않습니다.");
     		form.password2.focus();
@@ -39,79 +41,53 @@
     		form.phone.focus();
     		return false;
     	}
+    	*/
     	form.submit();
     }
   </script>
 </head>
 <body>
-  <div class="appTitle">${pageContext.servletContext.servletContextName}</div>
-  <div class="title">
-    <span>사용자 관리 - 회원 가입</span>
-  </div>
-
-  <!-- registration form  -->
-  <form name="form" method="POST" action="<c:url value='/user/register' />">
-    <c:if test="${registerFailed}">
-      <!-- 회원가입이 실패한 경우 exception 객체에 저장된 오류 메시지를 출력 -->
-      <div class="errmsg">${exception.getMessage()}</div>   
-    </c:if>
-    
-    <table class="uTable">
-      <tr>
-        <th>사용자 ID</th>
-        <td><input type="text" name="userId"
-          <c:if test="${registerFailed}">value="${user.userId}"</c:if> />
-        </td>
-      </tr>
-      <tr>
-        <th>비밀번호</th>
-        <td><input type="password" name="password"
-          <c:if test="${registerFailed}">value="${user.password}"</c:if> />
-        </td>
-      </tr>
-      <tr>
-        <th>비밀번호 확인</th>
-        <td><input type="password" name="password2"
-          <c:if test="${registerFailed}">value="${user.password}"</c:if> />
-        </td>
-      </tr>
-      <tr>
-        <th>이름</th>
-        <td><input type="text" name="name"
-          <c:if test="${registerFailed}">value="${user.name}"</c:if> />
-        </td>
-      </tr>
-      <tr>
-        <th>이메일 주소</th>
-        <td><input type="text" name="email"
-          <c:if test="${registerFailed}">value="${user.email}"</c:if> />
-        </td>
-      </tr>
-      <tr>
-        <th>전화번호</th>
-        <td><input type="text" name="phone"
-          <c:if test="${registerFailed}">value="${user.phone}"</c:if> />
-        </td>
-      </tr>
-      <tr>
-        <th>커뮤니티</th>
-        <td>
-          <select name="commId">
-            <option value="0">없음</option>
-            <c:forEach var="comm" items="${commList}">
-              <option value="${comm.id}"
-                <c:if test="${registerFailed && comm.id eq user.commId}">selected="selected"</c:if>>
-                ${comm.name}</option>
-            </c:forEach>
-          </select>     
-        </td>
-      </tr>       
-    </table>    
-    
-    <div class="buttons">
-      <button type="button" onClick="userCreate()">가입</button>
-      <a class="btn" href="<c:url value='/user/list' />">목록</a>
-    </div>
-  </form>
+	<form name="registerForm" method="POST" action="<c:url value='/user/register' />">
+		<table>
+			<tr>
+		        <th>아이디: </th>
+		        <td><input type="text" id="userId" name="userId"></td>
+		    </tr>
+	      	<tr>
+		        <th>비밀번호: </th>
+		        <td><input type="password" id="password" name="password"></td>
+		    </tr>
+		    <tr>
+		        <th>이름: </th>
+		        <td><input type="text" id="name" name="name"></td>
+		    </tr>
+		    <tr>
+		        <th>나이: </th>
+		        <td><input type="text" id="age" name="age"></td>
+		    </tr>
+		    <tr>
+		    	<th colspan="2">
+		    		<select id="gender" name="gender">
+						<option value="M">남자</option>
+						<option value="F">여자</option>
+					</select>
+		    	</th>
+		    </tr>
+		    <tr>
+		    	<td colspan="2">
+		    		<input type="file" id="image" name="image">
+		    	</td>
+		    </tr>
+		    <tr>
+		    	<td colspan="2">
+		    		<c:if test="${registerFailed}">이미 존재하는 사용자입니다.</c:if>
+		    	</td>
+		    </tr>
+		    <tr>
+		    	<td colspan="2"><button type="button" onclick="userCreate()">회원가입</button></td>
+		    </tr>
+		</table>
+	</form>
+	<button onclick="location.href='<c:url value='/login' />'">돌아가기</button>
 </body>
 </html>
