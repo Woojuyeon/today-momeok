@@ -3,10 +3,8 @@ package model.service;
 import java.sql.SQLException;
 import java.util.List;
 
-import model.dao.CommunityDAO;
 import model.dao.UserDAO;
-import model.domain.Community;
-import model.domain.User;
+import model.dto.UserDTO; 
 
 /**
  * 사용자 관리 API를 사용하는 개발자들이 직접 접근하게 되는 클래스.
@@ -15,6 +13,31 @@ import model.domain.User;
  * 비지니스 로직이 복잡한 경우에는 비지니스 로직만을 전담하는 클래스를 별도로 둘 수 있다.
  */
 public class UserManager {
+	private static UserManager userManager = new UserManager();
+	private UserDAO userDAO;
+	
+	private UserManager() {
+	    userDAO = new UserDAO();
+	}
+	
+	public static UserManager getInstance() {
+		return userManager;
+	}
+	
+	public UserDTO login(String userId, String password)
+			throws SQLException, UserNotFoundException, PasswordMismatchException {
+
+			UserDTO user = userDAO.login(userId, password);
+			
+			if(user == null) {
+				throw new UserNotFoundException("아이디 또는 비밀번호가 일치하지 않습니다.");
+			}
+			
+			return user;
+		}
+
+	
+	/*
 	private static UserManager userMan = new UserManager();
 	private UserDAO userDAO;
 	private CommunityDAO commDAO;
