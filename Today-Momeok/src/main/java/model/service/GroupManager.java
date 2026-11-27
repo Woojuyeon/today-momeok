@@ -16,4 +16,14 @@ public class GroupManager {
         group.setFilterDays(DEFAULT_FILTER_DAYS);
         return group;
     }
+
+    public boolean addMember(Group group, User member) {
+        for (User existing : group.getMembers()) {
+            if (existing.getUserId().equals(member.getUserId())) {
+                return false;
+            }
+        }
+        group.addMember(member);
+        return true;
+    }
 }

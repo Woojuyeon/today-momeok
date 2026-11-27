@@ -34,7 +34,7 @@ public class AddMemberController implements Controller {
         if (userId.isEmpty() || userId.length() > 10) {
             request.setAttribute("errorMessage", "아이디를 입력해 주세요.");
         } else {
-            UserDTO found = new UserDAO().findMemberById(userId);
+            UserDTO found = new UserDAO().findById(userId);
             if (found == null) {
                 request.setAttribute("errorMessage", "존재하지 않는 아이디입니다.");
             } else {
