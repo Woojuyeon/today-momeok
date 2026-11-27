@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import controller.page.PageController;
+import controller.group.AddMemberController;
 import controller.user.*;
 
 public class RequestMapping {
@@ -30,6 +31,7 @@ public class RequestMapping {
         mappings.put("/user/update", new UpdateUserController());	
         
         mappings.put("/group", new PageController());
+        mappings.put("/group/addmember", new AddMemberController());
 
         logger.info("Initialized Request Mapping!");
     }
