@@ -15,8 +15,9 @@
         <form method="post" action="<c:url value='/group/addmember' />">
             <label for="userId">ID</label>
             <input type="text" id="userId" name="userId" maxlength="10" required>
-            <button type="submit" disabled>추가하기</button>
+            <button type="submit">추가하기</button>
         </form>
+        <c:if test="${not empty errorMessage}"><p role="alert"><c:out value="${errorMessage}" /></p></c:if>
         <form method="get" action="<c:url value='/group/favoritegrouplist' />">
             <button type="submit" disabled>그룹 즐겨찾기</button>
         </form>
