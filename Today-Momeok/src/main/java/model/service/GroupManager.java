@@ -1,10 +1,25 @@
 package model.service;
 
+import model.dao.UserDAO;
 import model.domain.Group;
 import model.domain.User;
+import model.dto.UserDTO;
 
 public class GroupManager {
     private static final int DEFAULT_FILTER_DAYS = 3;
+    private final UserDAO userDAO;
+
+    public GroupManager() {
+        this(new UserDAO());
+    }
+
+    GroupManager(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    public UserDTO findMemberById(String userId) {
+        return userDAO.findById(userId);
+    }
 
     public Group createGroup(String userId, String userName) {
         User member = new User();
