@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import model.service.GroupManager;
 import model.domain.Group;
 
-public class PageController implements Controller {
+public class MakeGroupPageController implements Controller {
     private final GroupManager groupManager = new GroupManager();
 
     @Override

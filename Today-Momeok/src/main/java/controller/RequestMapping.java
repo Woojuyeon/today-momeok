@@ -5,7 +5,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import controller.page.PageController;
+import controller.page.MakeGroupPageController;
 import controller.group.AddMemberController;
 import controller.user.*;
 
@@ -30,7 +30,7 @@ public class RequestMapping {
         // mappings.put("/user/update/form", new UpdateUserController());	// 아래의 요청으로 통합
         mappings.put("/user/update", new UpdateUserController());	
         
-        mappings.put("/group", new PageController());
+        mappings.put("/group", new MakeGroupPageController());
         mappings.put("/group/addmember", new AddMemberController());
 
         logger.info("Initialized Request Mapping!");
