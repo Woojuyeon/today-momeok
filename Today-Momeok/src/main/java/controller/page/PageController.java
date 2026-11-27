@@ -6,26 +6,28 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.service.GroupManager;
+import model.domain.Group;
 
 public class PageController implements Controller {
     private final GroupManager groupManager = new GroupManager();
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        if (!"GET".equals(request.getMethod())) {
-            response.setHeader("Allow", "GET");
-            response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-            return null;
+        if (request.getMethod().equals("GET")) {
+            HttpSession session = request.getSession(false);
+            String userId = session == null ? null : UserSessionUtils.getLoginUserId(session);
+            if (userId == null) {
+                return "redirect:/login";
+            }
+            Group group = (Group) session.getAttribute("group");
+            if (group == null) {
+                group = groupManager.createGroup(userId, null);
+                session.setAttribute("group", group);
+            }
+            request.setAttribute("group", group);
+            return "/group/makegroup.jsp";
         }
 
-        HttpSession session = request.getSession(false);
-        String userId = session == null ? null : UserSessionUtils.getLoginUserId(session);
-        if (userId == null) {
-            return "redirect:/user/login";
-        }
-        // session 정보를 불러오기 기능을 넣은 후 작동
-//        String userName = (String) session.getAttribute(UserSessionUtils.USER_NAME_SESSION_KEY);
-//        request.setAttribute("group", groupManager.createGroup(userId, userName));
-        return "/group/makegroup.jsp";
+        return null;
     }
 }
