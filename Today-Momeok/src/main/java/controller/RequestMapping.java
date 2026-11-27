@@ -30,6 +30,9 @@ public class RequestMapping {
         mappings.put("/user/update", new UpdateUserController());	
         
         mappings.put("/group", new PageController());
+        
+        // 그룹 즐겨찾기 페이지
+        mappings.put("/favoriteGroup/list", new PageController());
 
         logger.info("Initialized Request Mapping!");
     }
